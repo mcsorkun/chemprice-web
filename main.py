@@ -23,7 +23,7 @@ LIMIT_SMILES = 100
 
 pc = cp.PriceCollector()
     
-st.set_page_config(page_title="ChemicalSearch Web Application", layout="wide")
+st.set_page_config(page_title="ChemPrice Web Application", layout="wide")
 
 emptycont=st.empty()
 home1=emptycont.container()
@@ -165,7 +165,7 @@ def collect(smiles_df, progress_output):
 def main():
     
 
-    home1.title("Chemical Search")
+    home1.title("ChemPrice: Chemical Price Search Tool")
     path = Path(__file__).parent / 'images/background.png'
     set_background(path)
 
