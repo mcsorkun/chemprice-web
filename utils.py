@@ -98,7 +98,16 @@ def molport_standardize_columns(data):
 
 # Collects prices for the given ids and coverts them into dataframe
 def molport_collect_prices(instance, molecule_ids):
+    """
+    Collects price data for molecules from Molport API.
 
+    :param instance: The PriceCollector instance containing API credentials.
+    :param molecule_ids: DataFrame containing molecule IDs and SMILES.
+    :type instance: PriceCollector
+    :type molecule_ids: pandas.DataFrame
+    :return: DataFrame containing collected price data.
+    :rtype: pandas.DataFrame
+    """
     all_molecules_data = []
 
     molport_username = instance.login['molport_username']
@@ -203,6 +212,16 @@ def chemspace_get_token(instance):
 
 # Collects prices for the given SMILES and coverts them into dataframe
 def chemspace_collect_prices(instance, smiles_list):
+    """
+    Collects price data for molecules from ChemSpace API.
+
+    :param instance: The PriceCollector instance containing API credentials.
+    :param smiles_list: list containing molecule SMILES.
+    :type instance: PriceCollector
+    :type smiles_list: list
+    :return: DataFrame containing collected price data.
+    :rtype: pandas.DataFrame
+    """
 
     access_token = chemspace_get_token(instance)
     url = "https://api.chem-space.com/v3/search/exact"
@@ -240,7 +259,9 @@ def chemspace_collect_prices(instance, smiles_list):
             print("Request failed with status code:", response.status_code)
             print("Response content:", response.text)
 
-        time.sleep(1.5)
+        # Pause for 1.5 seconds between each request
+        if index < len(smiles_list) - 1:
+            time.sleep(1.5)
 
     chemspace_data = []
     
@@ -274,7 +295,10 @@ def chemspace_collect_prices(instance, smiles_list):
 
 
 # Function to collect MCule IDs with respect to limits
-def mcule_get_ids(mcule_token, smiles_list):
+def mcule_get_ids(instance, smiles_list):
+    
+    mcule_token = instance.login['mcule_api_key']
+    
     id_smiles_list = []
 
     headers = {
@@ -308,7 +332,10 @@ def mcule_get_ids(mcule_token, smiles_list):
 
 
 # Function to build packages for multiple amounts
-def build_packages(mcule_token, df):
+def build_packages(instance, df):
+    
+    mcule_token = instance.login['mcule_api_key']
+    
     if df.empty:
         return
     # Define the API URL
@@ -369,8 +396,22 @@ def get_quotes(token, quote):
         response = requests.get(url, headers=headers)
         yield response.json()
 
+
 # Function to collect prices and data from MCule API
-def mcule_collect_prices(token, package_ids, check_freq=0.5):
+def mcule_collect_prices(instance, package_ids):
+    """
+    Collects price data for molecules from MCule API.
+
+    :param instance: The PriceCollector instance containing API credentials.
+    :param package_ids: list containing molecule package IDs.
+    :type instance: PriceCollector
+    :type package_ids: list
+    :return: DataFrame containing collected price data.
+    :rtype: pandas.DataFrame
+    """
+    
+    token = instance.login['mcule_api_key']
+    
     data = []
     
     if package_ids is None:
@@ -404,7 +445,7 @@ def mcule_collect_prices(token, package_ids, check_freq=0.5):
 
         response_package = check_status()
         while response_package == 1:
-            time.sleep(check_freq)
+            time.sleep(0.5)
             response_package = check_status()
 
         if response_package is None:
@@ -597,8 +638,6 @@ def filter_csv_by_min_price(df):
     filtered_df = pd.concat([filtered_df_g, filtered_df_mol, filtered_df_l])
 
     filtered_df = filtered_df.sort_values(by=['Input SMILES', 'USD/g', 'USD/mol', 'USD/l'])
-    # Save the filtered dataframe to a new CSV file
-    # filtered_df.to_csv("best_prices.csv", index=False)
     
     return filtered_df
 
@@ -651,11 +690,10 @@ def collect_vendors(instance, smiles_list, progress_output=None, ChemSpace=True,
         
     if MCule:
         # Get the molecule IDs and print count MolPort
-        mcule_token = instance.login['mcule_api_key']
         print(f"Collecting ID's for given {len(smiles_list)} SMILES from MCule...")
-        df_molecule_ids = mcule_get_ids(mcule_token, smiles_list)
+        df_molecule_ids = mcule_get_ids(instance, smiles_list)
         smiles_exists = df_molecule_ids['Input SMILES'].nunique()
-        package_id = build_packages(mcule_token, df_molecule_ids)
+        package_id = build_packages(instance, df_molecule_ids)
         print(f"Total: {smiles_exists} molecules and {len(df_molecule_ids)} conformers are found in MCule.\n")
         progress += 1/(2*nb_integrator)
         if progress_output is not None:
@@ -663,7 +701,7 @@ def collect_vendors(instance, smiles_list, progress_output=None, ChemSpace=True,
 
         # Get the prices and print count from MCule
         print(f"Collecting Prices for given {len(smiles_list)} IDs from MCule...")
-        mcule_prices = mcule_collect_prices(mcule_token, package_id)
+        mcule_prices = mcule_collect_prices(instance, package_id)
         mcule_prices = add_input_smiles_columns(df_molecule_ids, mcule_prices)
         smiles_with_price = mcule_prices.loc[mcule_prices['Price_USD'].notnull(), 'Input SMILES'].nunique()
         print(f"Total: {len(mcule_prices)} prices for {smiles_with_price} molecules are found in MCule.\n")

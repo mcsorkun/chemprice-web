@@ -1,7 +1,7 @@
+import sys
 import streamlit as st
 import pandas as pd
 import base64
-import chemicalprices as cp
 import time
 import tempfile
 import os
@@ -9,6 +9,7 @@ import threading
 import time
 from streamlit.runtime.scriptrunner import add_script_run_ctx
 from pathlib import Path
+import chemprice as cp
 
 DEFAULT_STATUS = 1
 INIT_STATUS = 2
@@ -22,7 +23,6 @@ LIMIT_SMILES = 100
 ######################
 
 pc = cp.PriceCollector()
-    
 st.set_page_config(page_title="ChemPrice Web Application", layout="wide")
 
 emptycont=st.empty()
@@ -49,6 +49,12 @@ def logo_check(chemin_image):
     # Convertir les données binaires en base64 pour l'affichage HTML
     image_base64 = get_base64(chemin_image)
     return f'<img src="data:image/jpeg;base64,{image_base64}" alt="Image" width="15">'
+
+# ChemPrice logo
+def logo_chemprice(chemin_image):
+    # Convertir les données binaires en base64 pour l'affichage HTML
+    image_base64 = get_base64(chemin_image)
+    return f'<img src="data:image/jpeg;base64,{image_base64}" alt="Image" width="250">'
 
 
 # Background of the window
@@ -77,10 +83,10 @@ def back_fun():
 def but_click(check_integrator):
     if st.session_state.input_smiles == "":
         st.warning("No SMILES selected")
-    elif check_integrator:
-        st.session_state["new_page"]=True
-    else :
+    elif not check_integrator:
         st.warning("No Integrator selected")
+    else :
+        st.session_state["new_page"]=True
 
 
 # Initialize integrator status
@@ -147,6 +153,7 @@ def display_price(dataframe, label, drop_input_smiles = False):
         
     os.remove(file_path)
     
+    dataframe = dataframe.dropna(axis=1, how='all')
     if drop_input_smiles:
         dataframe.drop("Input SMILES", axis=1, inplace=True)
     st.write(dataframe)
@@ -165,9 +172,18 @@ def collect(smiles_df, progress_output):
 def main():
     
 
-    home1.title("ChemPrice: Chemical Price Search Tool")
+    home1.title("ChemPrice: A Tool For Chemical Price Search Tool")
+    with home1.expander("About ChemPrice"):
+        # Enter identifier
+        st.write("ChemPrice is a Python tool for connecting to molecule sales platforms via API keys. The aim: automated extraction of data, such as prices and vendor names. ChemPrice supports Molport, ChemSpace and MCule integrators. It works by taking as input a list of molecules in the form of SMILES, producing a complete dataframe presenting all the prices found on different sources, as well as a second dataframe, highlighting the most advantageous offers in terms of quality/price ratio.")
+        documentation_url = "https://differ-chemprice.readthedocs-hosted.com/en/latest/"
+        st.markdown(f"If you are intrested in a more detailed explanation about ChemPlot please visit the official library's documentation at [Read the docs.]({documentation_url})")
+        
     path = Path(__file__).parent / 'images/background.png'
     set_background(path)
+    path = Path(__file__).parent / 'images/logo.png'
+    st.sidebar.markdown(logo_chemprice(path), unsafe_allow_html=True)
+    st.sidebar.markdown("")
 
 
     ######################
@@ -239,7 +255,7 @@ def main():
     
     smiles_df = [] 
     if not st.session_state["new_page"]:
-        smiles_file = st.sidebar.file_uploader("Choose a file")
+        smiles_file = st.sidebar.file_uploader("Choose a file", help = "The file must be a csv file with the list of SMILES to be searched in the first column.")
 
         if smiles_file is not None:
             df = pd.read_csv(smiles_file)
@@ -250,9 +266,8 @@ def main():
             st.session_state.smiles_list = df.iloc[:, 0].to_list()
             st.session_state.input_smiles = st.session_state.smiles_list[0]
             smiles_df = st.session_state.smiles_list
-    
-    # if 'smiles_list' in st.session_state:
-    #     smiles_df = st.session_state.smiles_list
+        else:
+            st.session_state.smiles_list = ""
         
 
     ######################
@@ -270,6 +285,7 @@ def main():
             placeholder="Enter a SMILES : CC(=O)NC1=CC=C(C=C1)O",
             label_visibility="collapsed"
         )
+        smiles_df = st.session_state.input_smiles
 
     
     ######################
