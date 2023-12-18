@@ -175,7 +175,7 @@ def main():
     home1.title("ChemPrice: Chemical Price Search Tool")
     with home1.expander("About ChemPrice"):
         # Enter identifier
-        st.write("ChemPrice is a software designed to simplify the gathering of pricing data from more than 100 suppliers by seamlessly integrating with ChemSpace, Mcule, and Molport platforms. It ensures uniformity in pricing units, providing comprehensive and optimized pricing details for specified compounds.")
+        st.write("ChemPrice is a software designed to simplify the gathering of pricing data from more than 100 suppliers by integrating with ChemSpace, Mcule, and Molport platforms. It ensures uniformity in pricing units, providing comprehensive and optimized pricing details for specified compounds.")
         documentation_url = "https://chemprice.readthedocs.io/en/latest/"
         st.markdown(f"If you are interested in a more detailed explanation about ChemPrice please visit the official library's documentation at [Read the docs.]({documentation_url})")
         
