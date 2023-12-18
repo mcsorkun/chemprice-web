@@ -175,7 +175,7 @@ def main():
     home1.title("ChemPrice: Chemical Price Search Tool")
     with home1.expander("About ChemPrice"):
         # Enter identifier
-        st.write("ChemPrice is a Python tool for connecting to molecule sales platforms via API keys. The aim: automated extraction of data, such as prices and vendor names. ChemPrice supports Molport, ChemSpace and MCule integrators. It works by taking as input a list of molecules in the form of SMILES, producing a complete dataframe presenting all the prices found on different sources, as well as a second dataframe, highlighting the most advantageous offers in terms of quality/price ratio.")
+        st.write("ChemPrice is a software designed to simplify the gathering of pricing data from more than 100 suppliers by seamlessly integrating with ChemSpace, Mcule, and Molport platforms. It ensures uniformity in pricing units, providing comprehensive and optimized pricing details for specified compounds.")
         documentation_url = "https://chemprice.readthedocs.io/en/latest/"
         st.markdown(f"If you are interested in a more detailed explanation about ChemPrice please visit the official library's documentation at [Read the docs.]({documentation_url})")
         
