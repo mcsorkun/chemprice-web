@@ -54,7 +54,7 @@ def logo_check(chemin_image):
 def logo_chemprice(chemin_image):
     # Convertir les données binaires en base64 pour l'affichage HTML
     image_base64 = get_base64(chemin_image)
-    return f'<img src="data:image/jpeg;base64,{image_base64}" alt="Image" width="250">'
+    return f'<img src="data:image/jpeg;base64,{image_base64}" alt="ChemPrice Logo" style="width: 50px; display: block; margin: 0 auto;">'
 
 
 # Background of the window
