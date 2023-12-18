@@ -181,7 +181,7 @@ def main():
         
     path = Path(__file__).parent / 'images/background.png'
     set_background(path)
-    path = Path(__file__).parent / 'images/logo.png'
+    path = Path(__file__).parent / 'images/logo_c.png'
     st.sidebar.markdown(logo_chemprice(path), unsafe_allow_html=True)
     st.sidebar.markdown("")
 
