@@ -241,7 +241,7 @@ def main():
         
         st.markdown(
             """
-            To use this interface, please follow these steps:
+            To use the ChemPrice Tool, please follow these steps:
             1. From the search bar, either enter a single molecule in a SMILES notation or import a CSV file containing the SMILES notations of multiple molecules (SMILES should be the first column of the file).
             2. Select the integrators you want to connect.
             3. Type your personal API key to establish the connection.
