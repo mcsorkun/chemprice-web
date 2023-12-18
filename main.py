@@ -1,4 +1,4 @@
-import sys
+timport sys
 import streamlit as st
 import pandas as pd
 import base64
@@ -122,7 +122,7 @@ def show_connection_expander(integrator_name, integrator_web_link):
             api_key = st.text_input("Api key:", key=f"{integrator_name}_key")
             pc_function = getattr(pc, f"set{integrator_name}ApiKey")
             pc_function(api_key)
-            login = st.button("Log in", key=f"{integrator_name}_connect")
+            login = st.button("Connect", key=f"{integrator_name}_connect")
             st.markdown(f"[Request api access key.]({integrator_web_link})")
 
             # Connect button handling
