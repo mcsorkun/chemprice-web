@@ -242,9 +242,11 @@ def main():
         st.markdown(
             """
             To use this interface, please follow these steps:
-            1. In the search bar, either select a SMILES (Simplified Molecular Input Line Entry System) or import a CSV file containing the SMILES you are looking for (ensure that the SMILES are in the first column of the file).
-            2. Choose the integrators you want to use.
-            3. Click on the 'Search Prices' button to initiate the search.
+            1. From the search bar, either enter a single molecule in a SMILES notation or import a CSV file containing the SMILES notations of multiple molecules (SMILES should be the first column of the file).
+            2. Select the integrators you want to connect.
+            3. Type your personal API key to establish the connection.
+            4. Ensure at least one connection is established with one of the integrators. (A green icon will be visible once a connection is established.)
+            5. Click the 'Search Prices' button to initiate the search.
             """
         )
       
