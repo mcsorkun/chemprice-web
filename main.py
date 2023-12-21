@@ -213,10 +213,11 @@ def main():
         ("ChemSpace", "https://chem-space.com/contacts", 2),
         ("Mcule", "https://mcule.com/contact/", 3),
     ]
+
+    if integrator_name=="Mcule":
+        integrator_name="MCule"
     
-    for integrator_name, integrator_web_link, integrator_num in integrators:
-        if integrator_name=="Mcule":
-                integrator_name="MCule"
+    for integrator_name, integrator_web_link, integrator_num in integrators:     
         initialize_integrator(integrator_name)
 
     selected_options = []
