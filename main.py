@@ -98,10 +98,6 @@ def initialize_integrator(integrator_name):
 # Create integrator checkbox and activation status
 def create_integration_column(col, integrator_name):
     sub_col = col.columns([0.07, 0.93])
-    if integrator_name=="MCule":
-        integrator_name_fixed = "Mcule"
-    else: 
-        integrator_name_fixed = integrator_name
     option = sub_col[0].checkbox(" ", key=f"{integrator_name_fixed}_box")
 
     # Display integration status based on activation
@@ -121,7 +117,11 @@ def show_connection_expander(integrator_name, integrator_web_link):
     if st.session_state[f'activate_{integrator_name}'] == DEFAULT_STATUS:
         
         # Display connection expander
-        with st.expander(f"{integrator_name} Connection", expanded=True):
+        if integrator_name=="MCule":
+            integrator_name_fixed = "Mcule"
+        else: 
+            integrator_name_fixed = integrator_name
+        with st.expander(f"{integrator_name_fixed} Connection", expanded=True):
             # Enter identifier
             api_key = st.text_input("Api key:", key=f"{integrator_name}_key")
             pc_function = getattr(pc, f"set{integrator_name}ApiKey")
