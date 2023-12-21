@@ -98,7 +98,9 @@ def initialize_integrator(integrator_name):
 # Create integrator checkbox and activation status
 def create_integration_column(col, integrator_name):
     sub_col = col.columns([0.07, 0.93])
-    option = sub_col[0].checkbox(" ", key=f"{integrator_name}_box")
+    if integrator_name=="MCule":
+        integrator_name_fixed="Mcule"    
+    option = sub_col[0].checkbox(" ", key=f"{integrator_name_fixed}_box")
 
     # Display integration status based on activation
     if st.session_state[f'activate_{integrator_name}'] == INIT_STATUS:
