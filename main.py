@@ -99,14 +99,18 @@ def initialize_integrator(integrator_name):
 def create_integration_column(col, integrator_name):
     sub_col = col.columns([0.07, 0.93])
     option = sub_col[0].checkbox(" ", key=f"{integrator_name}_box")
+    if integrator_name=="MCule":
+        integrator_name_fixed = "Mcule"
+    else: 
+        integrator_name_fixed = integrator_name
 
     # Display integration status based on activation
     if st.session_state[f'activate_{integrator_name}'] == INIT_STATUS:
         path = Path(__file__).parent / 'images/green_check.png'
         green_check = logo_check(path)
-        sub_col[1].write(f"{integrator_name}  {green_check}", unsafe_allow_html=True)
+        sub_col[1].write(f"{integrator_name_fixed}  {green_check}", unsafe_allow_html=True)
     else:
-        sub_col[1].write(integrator_name)
+        sub_col[1].write(integrator_name_fixed)
 
     return option
        
