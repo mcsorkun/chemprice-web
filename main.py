@@ -119,8 +119,6 @@ def show_connection_expander(integrator_name, integrator_web_link):
         # Display connection expander
         with st.expander(f"{integrator_name} Connection", expanded=True):
             # Enter identifier
-            if integrator_name=="Mcule":
-                integrator_name="MCule"
             api_key = st.text_input("Api key:", key=f"{integrator_name}_key")
             pc_function = getattr(pc, f"set{integrator_name}ApiKey")
             pc_function(api_key)
@@ -217,6 +215,8 @@ def main():
     ]
     
     for integrator_name, integrator_web_link, integrator_num in integrators:
+        if integrator_name=="Mcule":
+                integrator_name="MCule"
         initialize_integrator(integrator_name)
 
     selected_options = []
