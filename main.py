@@ -211,7 +211,7 @@ def main():
     integrators = [
         ("Molport", "https://www.molport.com/shop/user-api-keys", 1),
         ("ChemSpace", "https://chem-space.com/contacts", 2),
-        ("MCule", "https://mcule.com/contact/", 3),
+        ("Mcule", "https://mcule.com/contact/", 3),
     ]
     
     for integrator_name, integrator_web_link, integrator_num in integrators:
@@ -306,7 +306,7 @@ def main():
         if 'ChemSpace_api_key' in st.session_state:
             pc.setChemSpaceApiKey(st.session_state['ChemSpace_api_key'])
     
-    if "MCule" in selected_options:
+    if "Mcule" in selected_options:
         if 'MCule_api_key' in st.session_state:
             pc.setMCuleApiKey(st.session_state['MCule_api_key'])
     
